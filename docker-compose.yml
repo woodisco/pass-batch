@@ -1,0 +1,18 @@
+# Docker Compose의 버전 정보
+version: '3.8'
+
+services:
+  mysql: # 서비스의 이름
+    container_name: mysql_local
+    image: mysql:latest
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/initdb.d:/docker-entrypoint-initdb.d # 컨테이너가 시작되면 이 폴더 내의 sh, sql파일 실행
+    ports:
+      - "3306:3306"
+    environment: # 환경 변수
+      - MYSQL_DATABASE=batch_local
+      - MYSQL_USER=woojoo
+      - MYSQL_PASSWORD=0425
+      - MYSQL_ROOT_PASSWORD=0425
+      - TZ=Asia/Tokyo
