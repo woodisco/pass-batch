@@ -13,6 +13,6 @@ services:
     environment: # 환경 변수
       - MYSQL_DATABASE=batch_local
       - MYSQL_USER=woojoo
-      - MYSQL_PASSWORD=0425
-      - MYSQL_ROOT_PASSWORD=0425
+      - MYSQL_PASSWORD=Woojoo0425@
+      - MYSQL_ROOT_PASSWORD=Woojoo0425
       - TZ=Asia/Tokyo
