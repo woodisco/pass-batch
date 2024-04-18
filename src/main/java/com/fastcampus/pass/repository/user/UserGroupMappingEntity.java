@@ -1,10 +1,10 @@
-package repository.user;
+package com.fastcampus.pass.repository.user;
 
+import com.fastcampus.pass.repository.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import repository.BaseEntity;
 
 @Getter
 @Setter

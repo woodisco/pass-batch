@@ -1,4 +1,4 @@
-package repository;
+package com.fastcampus.pass.repository;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

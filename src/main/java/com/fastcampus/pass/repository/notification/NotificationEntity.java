@@ -1,11 +1,11 @@
-package repository.notification;
+package com.fastcampus.pass.repository.notification;
 
+import com.fastcampus.pass.repository.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import jakarta.persistence.*;
-import repository.BaseEntity;
 
 import java.time.LocalDateTime;
 

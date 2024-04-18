@@ -1,4 +1,4 @@
-package repository.user;
+package com.fastcampus.pass.repository.user;
 
 import lombok.Getter;
 import lombok.Setter;

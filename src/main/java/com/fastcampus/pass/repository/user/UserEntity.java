@@ -1,5 +1,6 @@
-package repository.user;
+package com.fastcampus.pass.repository.user;
 
+import com.fastcampus.pass.repository.BaseEntity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,6 @@ import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
 import org.hibernate.type.SqlTypes;
-import repository.BaseEntity;
 
 import java.util.Map;
 

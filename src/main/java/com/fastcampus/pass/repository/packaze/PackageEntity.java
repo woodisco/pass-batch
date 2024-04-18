@@ -1,4 +1,4 @@
-package repository.packaze;
+package com.fastcampus.pass.repository.packaze;
 
 import jakarta.persistence.*;
 import lombok.Getter;

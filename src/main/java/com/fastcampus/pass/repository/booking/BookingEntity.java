@@ -1,12 +1,12 @@
-package repository.booking;
+package com.fastcampus.pass.repository.booking;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import repository.BaseEntity;
-import repository.pass.PassEntity;
-import repository.user.UserEntity;
+import com.fastcampus.pass.repository.BaseEntity;
+import com.fastcampus.pass.repository.pass.PassEntity;
+import com.fastcampus.pass.repository.user.UserEntity;
 
 import java.time.LocalDateTime;
 
