@@ -94,6 +94,13 @@ public class UsePassesJobConfig {
     }
 
     @Bean
+    public AsyncItemWriter<BookingEntity> usePassesAsyncItemWriter() {
+        AsyncItemWriter<BookingEntity> asyncItemWriter = new AsyncItemWriter<>();
+        asyncItemWriter.setDelegate(usePassesItemWriter()); // usePassesItemWriter 최종 결과값을 넘겨주고 작업을 위임합니다.
+        return asyncItemWriter;
+    }
+
+    @Bean
     public ItemWriter<BookingEntity> usePassesItemWriter() {
         return bookingEntities -> {
             for (BookingEntity bookingEntity : bookingEntities) {

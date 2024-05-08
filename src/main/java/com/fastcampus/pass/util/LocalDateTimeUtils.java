@@ -15,4 +15,11 @@ public class LocalDateTimeUtils {
     public static String format(final LocalDateTime localDateTime, DateTimeFormatter formatter) {
         return localDateTime.format(formatter);
     }
+
+    public static LocalDateTime parse(final String localDateTimeString) {
+        if(localDateTimeString.isEmpty()) {
+            return null;
+        }
+        return LocalDateTime.parse(localDateTimeString, YYYY_MM_DD_HH_MM);
+    }
 }
