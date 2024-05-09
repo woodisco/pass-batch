@@ -2,6 +2,8 @@ package com.fastcampus.pass.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 
 public class LocalDateTimeUtils {
 
@@ -21,5 +23,9 @@ public class LocalDateTimeUtils {
             return null;
         }
         return LocalDateTime.parse(localDateTimeString, YYYY_MM_DD_HH_MM);
+    }
+
+    public static int getWeekOfYear(final LocalDateTime localDateTime) {
+        return localDateTime.get(WeekFields.of(Locale.KOREA).weekOfYear());
     }
 }

@@ -6,8 +6,11 @@ import com.fastcampus.pass.repository.statistics.StatisticsRepository;
 import com.fastcampus.pass.util.LocalDateTimeUtils;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.builder.FlowBuilder;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemWriter;
@@ -16,7 +19,9 @@ import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilde
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.batch.core.job.flow.Flow;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,11 +35,46 @@ public class MakeStatisticsJobConfig {
     private final int CHUNK_SIZE = 5;
 
     private final EntityManagerFactory entityManagerFactory;
+
     private final StatisticsRepository statisticsRepository;
 
-    public MakeStatisticsJobConfig(EntityManagerFactory entityManagerFactory, StatisticsRepository statisticsRepository) {
+    private final MakeDailyStatisticsTasklet makeDailyStatisticsTasklet;
+
+    private final MakeWeeklyStatisticsTasklet makeWeeklyStatisticsTasklet;
+
+    public MakeStatisticsJobConfig(EntityManagerFactory entityManagerFactory, StatisticsRepository statisticsRepository, MakeDailyStatisticsTasklet makeDailyStatisticsTasklet, MakeWeeklyStatisticsTasklet makeWeeklyStatisticsTasklet) {
         this.entityManagerFactory = entityManagerFactory;
         this.statisticsRepository = statisticsRepository;
+        this.makeDailyStatisticsTasklet = makeDailyStatisticsTasklet;
+        this.makeWeeklyStatisticsTasklet = makeWeeklyStatisticsTasklet;
+    }
+
+    @Bean
+    public Job makeStatisticsJob(JobRepository jobRepository,
+                                 Step addStatisticsStep,
+                                 Step makeDailyStatisticsStep,
+                                 Step makeWeeklyStatisticsStep) {
+        Flow addStatisticsFlow = new FlowBuilder<Flow>("addStatisticsFlow")
+                .start(addStatisticsStep)
+                .build();
+        Flow makeDailyStatisticsFlow = new FlowBuilder<Flow>("makeDailyStatisticsFlow")
+                .start(makeDailyStatisticsStep)
+                .build();
+
+        Flow makeWeeklyStatisticsFlow = new FlowBuilder<Flow>("makeWeeklyStatisticsFlow")
+                .start(makeWeeklyStatisticsStep)
+                .build();
+
+        Flow parallelMakeStatisticsFlow = new FlowBuilder<Flow>("parallelMakeStatisticsFlow")
+                .split(new SimpleAsyncTaskExecutor())
+                .add(makeDailyStatisticsFlow, makeWeeklyStatisticsFlow)
+                .build();
+
+        return new JobBuilder("makeStatisticsJob", jobRepository)
+                .start(addStatisticsFlow)
+                .next(parallelMakeStatisticsFlow)
+                .build()
+                .build();
     }
 
     @Bean
@@ -79,5 +119,19 @@ public class MakeStatisticsJobConfig {
             final List<StatisticsEntity> statisticsEntities = new ArrayList<>(statisticsEntityMap.values());
             statisticsRepository.saveAll(statisticsEntities);
         };
+    }
+
+    @Bean
+    public Step makeDailyStatisticsStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("makeDailyStatisticsStep", jobRepository)
+                .tasklet(makeDailyStatisticsTasklet, transactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step makeWeeklyStatisticsStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("makeWeeklyStatisticsStep", jobRepository)
+                .tasklet(makeWeeklyStatisticsTasklet, transactionManager)
+                .build();
     }
 }
