@@ -36,6 +36,9 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
+	// csv
+	implementation 'com.opencsv:opencsv:5.7.0'
+
 	// test
 	testImplementation "org.testcontainers:testcontainers:1.17.6"
 	implementation platform('org.testcontainers:testcontainers-bom:1.17.6')
