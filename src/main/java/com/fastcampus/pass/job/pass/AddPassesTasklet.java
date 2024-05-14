@@ -45,6 +45,7 @@ public class AddPassesTasklet implements Tasklet {
             count += addPasses(bulkPassEntity, userIds);
             // pass 추가 이후 상태를 COMPLETED로 업데이트합니다.
             bulkPassEntity.setStatus(BulkPassStatus.COMPLETED);
+            bulkPassRepository.saveAll(bulkPassEntities);
         }
 
         log.info("AddPassesTasklet - execute: 이용권 {}건 추가 완료, startedAt={}", count, startedAt);

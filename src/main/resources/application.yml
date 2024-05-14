@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: pass-batch
@@ -13,4 +16,4 @@ spring:
     jdbc:
       initialize-schema: always
     job:
-      enabled: false
+      enabled: false # 기본값 true는 Spring Boot 실행 시 등록되어 있는 Job들이 실행됩니다.
