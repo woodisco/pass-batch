@@ -9,6 +9,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -28,6 +29,7 @@ public class AddPassesJopConfig {
     }
 
     @Bean
+    @Primary
     public Step addPassesStep(JobRepository jobRepository,
                               PlatformTransactionManager transactionManager,
                               @Qualifier("addPassesTasklet") Tasklet tasklet) {

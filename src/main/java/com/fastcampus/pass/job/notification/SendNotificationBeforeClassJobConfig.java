@@ -22,7 +22,6 @@ import org.springframework.batch.item.support.SynchronizedItemStreamReader;
 import org.springframework.batch.item.support.builder.SynchronizedItemStreamReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -53,7 +52,6 @@ public class SendNotificationBeforeClassJobConfig {
     }
 
     @Bean
-    @Primary
     public Step addNotificationStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder("addNotificationStep", jobRepository)
                 .<BookingEntity, NotificationEntity>chunk(CHUNK_SIZE, transactionManager)
